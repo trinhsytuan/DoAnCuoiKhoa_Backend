@@ -1,7 +1,17 @@
 const connection = require("./src/config/database");
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const app = express();
+const fs = require("fs");
+var cors = require("cors");
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({ credentials: true, origin: "*" }));
+app.use("/api/static", express.static(path.join(__dirname, "uploads")));
+const mainRouter = require("./src/router/mainRouter");
+app.use("/", mainRouter);
 async function main() {
   try {
     await connection();
