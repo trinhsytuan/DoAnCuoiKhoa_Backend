@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: "*" }));
 app.use("/api/static", express.static(path.join(__dirname, "uploads")));
 const mainRouter = require("./src/router/mainRouter");
-app.use("/", mainRouter);
+app.use("/api", mainRouter);
 async function main() {
   try {
     await connection();

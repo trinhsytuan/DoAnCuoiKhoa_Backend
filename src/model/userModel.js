@@ -5,8 +5,9 @@ const userModel = new mongoose.Schema(
     username: { type: String, required: true },
     password: { type: String, required: true },
     idCrypto: { type: Number, required: true },
-    roleUser: { type: String },
+    roleUser: { type: String, require: true },
     privateKey: { type: String },
+    publicKey: { type: String }
   },
   { timestamps: true }
 );
