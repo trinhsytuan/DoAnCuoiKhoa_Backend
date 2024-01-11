@@ -12,22 +12,36 @@ const {
 } = require("../../utils/utils");
 const jwt = require("jsonwebtoken");
 const signUp = async (req, res) => {
-  const { username, password, roleUser } = req.body;
-  if (!username || !password || !roleUser) {
-    return res.status(302).json(CHUA_DU_THONG_TIN);
+  try {
+    const { username, password, role_user } = req.body;
+
+    if (!username || !password || !role_user) {
+      return res.status(302).json(CHUA_DU_THONG_TIN);
+    }
+    let idUser = await getIdUser();
+    idUser++;
+    const hashPasswords = await hashPassword(password);
+    const user = await userModelSchema.create({
+      username,
+      password: hashPasswords,
+      roleUser: role_user,
+      idCrypto: idUser,
+      privateKey: privateKey[idUser],
+      publicKey: globalParams[idUser],
+    });
+    return res.status(200).json(user);
+  } catch (error) {
+
+    if (error.code === 11000) {
+      const duplicateKeyError = error.keyPattern;
+      if (duplicateKeyError.username === 1) {
+        return res.status(400).json({ message: "Email đã tồn tại" });
+      }
+    } else {
+      console.log(error);
+      res.status(400).json({ message: error });
+    }
   }
-  let idUser = await getIdUser();
-  idUser++;
-  const hashPasswords = await hashPassword(password);
-  const user = await userModelSchema.create({
-    username,
-    password: hashPasswords,
-    roleUser,
-    idCrypto: idUser,
-    privateKey: privateKey[idUser],
-    publicKey: globalParams[idUser],
-  });
-  res.status(200).json(user);
 };
 const signIn = async (req, res) => {
   const { username, password } = req.body;
