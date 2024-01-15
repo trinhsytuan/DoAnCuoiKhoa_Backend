@@ -1,6 +1,7 @@
 const {
   CHUA_DU_THONG_TIN,
   WRONG_PASSWORD,
+  recordNewUpdate,
 } = require("../../constant/constant");
 const { globalParams } = require("../../constant/globalParams");
 const { privateKey } = require("../../constant/privateKey");
@@ -31,7 +32,6 @@ const signUp = async (req, res) => {
     });
     return res.status(200).json(user);
   } catch (error) {
-
     if (error.code === 11000) {
       const duplicateKeyError = error.keyPattern;
       if (duplicateKeyError.username === 1) {
@@ -66,4 +66,44 @@ const getMyInfo = async (req, res) => {
   const response = await userModelSchema.findOne({ _id });
   return res.status(200).json(response);
 };
-module.exports = { signUp, signIn, getMyInfo };
+const updateMyInfo = async (req, res) => {
+  try {
+    const userID = req.decodeToken._id;
+    let dataUpdate = {};
+    if (req?.file?.filename) dataUpdate.avatar = req.file.filename;
+    const updatedUser = await userModelSchema.findOneAndUpdate(
+      { _id: userID },
+      { $set: dataUpdate },
+      recordNewUpdate
+    );
+
+    res.status(200).json(updatedUser);
+  } catch (e) {
+    return res.status(400).json({ success: false, message: e.toString() });
+  }
+};
+const changeNewPassword = async (req, res) => {
+  try {
+    const infoDataUser = await userModelSchema.findOne({ _id: req.decodeToken._id });
+    const statusCode = await comparePasswords(
+      req.body.old_password,
+      infoDataUser.password
+    );
+    if (statusCode == false) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Mật khẩu cũ không đúng" });
+    }
+    const newPassword = await hashPassword(req.body.new_password);
+    const response = await userModelSchema.findOneAndUpdate(
+      { _id: req.decodeToken._id },
+      { $set: { password: newPassword } },
+      recordNewUpdate
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ success: false, message: e.toString() });
+  }
+};
+module.exports = { signUp, signIn, getMyInfo, updateMyInfo, changeNewPassword };
