@@ -10,9 +10,9 @@ const WRONG_PASSWORD = {
 const URL_BASE = {
     DIRECTORY_IMAGE: "uploads/",
 };
-const recordNewUpdate = { new: true }; // Trả về tài liệu mới sau khi cập nhật
+const recordNewUpdate = {new: true}; // Trả về tài liệu mới sau khi cập nhật
 
-const sort_time = { createdAt: -1 };
+const sort_time = {createdAt: -1};
 const STATUS_TD = {
     reject: "reject",
     accepted: "accepted",
@@ -23,7 +23,11 @@ const CHUA_DU_THONG_TIN = {
     success: false,
     message: "Chưa nhập đủ thông tin"
 }
-
+const FILETYPE_ROLE = {
+    FILE: "file",
+    VIDEO: "video",
+    LIVESTREAM: "livestream"
+}
 module.exports = {
     ROLE_SYSTEM,
     WRONG_PASSWORD,
@@ -31,6 +35,7 @@ module.exports = {
     recordNewUpdate,
     sort_time,
     STATUS_TD,
-    CHUA_DU_THONG_TIN
+    CHUA_DU_THONG_TIN,
+    FILETYPE_ROLE
 
 };

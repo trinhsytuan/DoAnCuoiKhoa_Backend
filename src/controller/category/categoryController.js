@@ -42,4 +42,15 @@ const editCategory = async (req, res) => {
         })
     }
 }
-module.exports = {insertOneCategory, deleteCategory, editCategory};
+const getCategoryByID = async (req, res) => {
+    try {
+        const response = await categoryModels.findAll({idUser: req.decodeToken._id}).loan();
+        return res.status(200).json(response);
+    } catch (e) {
+        return res.status(400).json({
+            success: false,
+            message: e.toString()
+        })
+    }
+}
+module.exports = {insertOneCategory, deleteCategory, editCategory, getCategoryByID};
