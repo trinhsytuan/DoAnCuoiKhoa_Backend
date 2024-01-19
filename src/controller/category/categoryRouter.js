@@ -4,7 +4,7 @@ const {checkToken} = require("../../utils/utils");
 const {insertOneCategory, deleteCategory, editCategory, getCategoryByID} = require("./categoryController");
 const router = express.Router();
 router.post("/create", insertOneCategory);
-router.delete("/delete", deleteCategory);
+router.delete("/delete/:id", deleteCategory);
 router.put("/update/:id", editCategory);
 router.get("/details", getCategoryByID);
 module.exports = router;
