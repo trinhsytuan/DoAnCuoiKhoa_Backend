@@ -7,6 +7,7 @@ const path = require("path");
 const { imageUpload } = require("../../utils/uploadImage");
 const util = require("util");
 const { convertStringToByte, unlinkFile } = require("../../utils/utils");
+const { FILETYPE_ROLE } = require("../../constant/constant");
 require("dotenv").config();
 const uploadMiddleware = util.promisify(imageUpload.single("file"));
 const createNewFile = async (req, res) => {
@@ -38,8 +39,16 @@ const createNewFile = async (req, res) => {
       );
     fs.writeFileSync(ToFilePath, encryptedData);
     unlinkFile(absoluteFilePath);
-    //const response = await handleCreate(fileModelSchema, {});
-    //res.status(200).json(response);
+    const response = await handleCreate(fileModelSchema, {
+        fileName: FileNameOrigin,
+        userOwn: req.decodeToken._id,
+        tRandom: keyarr[3],
+        C1: keyarr[1],
+        C2: keyarr[2],
+        category: "65aa27529fb979afeb0486d4",
+        fileType: FILETYPE_ROLE.FILE
+    });
+    res.status(200).json(response);
   });
 };
 const processFile = (stdout) => {

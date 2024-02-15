@@ -9,7 +9,7 @@ const fileModel = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             required: true
         },
-        tRandom: {type: Number},
+        tRandom: {type: String},
         C1: {type: String},
         C2: {type: String},
         category: {
