@@ -22,8 +22,9 @@ const createNewFile = async (req, res) => {
   );
   const cipherFile = fs.readFileSync(absoluteFilePath);
   const khoak = await EncryptionBGW(idUser + 1, async (key) => {
+    const keyarr = key.split("\n");
     const iv = Buffer.from(process.env.IV_CIPHER, 'hex');
-    const keyBuffer = await convertStringToByte("fsdfsd");
+    const keyBuffer = await convertStringToByte(keyarr[0]);
     const cipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, iv);
     const encryptedData = Buffer.concat([
       cipher.update(cipherFile),
