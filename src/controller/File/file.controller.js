@@ -12,6 +12,7 @@ require("dotenv").config();
 const uploadMiddleware = util.promisify(imageUpload.single("file"));
 const createNewFile = async (req, res) => {
   await uploadMiddleware(req, res);
+  const dataParse = JSON.parse(req.body.data);
   const FileNameOrigin = req.file.filename;
   const idUser = req.decodeToken.idCrypto;
   const fileNameMulter = req.file.filename;
@@ -45,7 +46,7 @@ const createNewFile = async (req, res) => {
         tRandom: keyarr[3],
         C1: keyarr[1],
         C2: keyarr[2],
-        category: "65aa27529fb979afeb0486d4",
+        category: dataParse.category,
         fileType: FILETYPE_ROLE.FILE
     });
     res.status(200).json(response);
