@@ -21,14 +21,14 @@ function ReEncryptionBGW(t, idCrypto) {
     return stdout;
   });
 }
-function DecryptionBGW(idCrypto, privateKey, C1, C2) {
+function DecryptionBGW(idCrypto, tapgiaima, privateKey, C1, C2, callback) {
   const absoluteFilePath = path.join(__dirname, "GiaiMa");
   exec(
-    `${absoluteFilePath} ${idCrypto} ${privateKey} ${C1} ${C2}`,
+    `${absoluteFilePath} ${idCrypto} ${tapgiaima} ${privateKey.replace(/[\[\]]/g, '')} ${C1.replace(/[\[\]]/g, '')} ${C2.replace(/[\[\]]/g, '')}`,
     (error, stdout, stderr) => {
       //Tham so dau ra
       //1 la khoa K, C1, C2, t
-      return stdout;
+      callback(stdout);
     }
   );
 }

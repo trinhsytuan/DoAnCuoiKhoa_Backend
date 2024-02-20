@@ -61,9 +61,9 @@ void setup() {
 }
 void xulydauvao(string s) {
     stringstream ss(s);
-    int i;
+    string i;
     while (ss >> i) {
-        slgm.push_back(i);
+        slgm.push_back(stoi(i));
         if (ss.peek() == ',')
             ss.ignore();
     }
@@ -99,12 +99,15 @@ int main(int argc, char const *argv[]) {
     string khoabimat = "[" + string(argv[argc-6]) + argv[argc-5] + "]";
     freopen("dauvao.txt", "rt", stdin);
     //Nguoi giai ma
+    //Tap nhung nguoi co ban ma
     //Khoa bi mat cua nguoi nhan
     //Ban ma Hdr1, Hdr2
+    int nguoigiaima = stoi(argv[argc-8]);
+    string m = argv[argc-7];
+    xulydauvao(m);
     SETUP_PARAMS();
     setup();
     string Hdr1 = "[" + string(argv[argc-4]) + argv[argc-3] + "]";
     string Hdr2 = "[" + string(argv[argc-2]) + argv[argc-1] + "]";
-    Decryption(stoi(argv[argc-7]), khoabimat, Hdr1, Hdr2);
-
+    Decryption(nguoigiaima, khoabimat, Hdr1, Hdr2);
 }

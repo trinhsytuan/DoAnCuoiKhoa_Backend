@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: "*" }));
 app.use("/api/static", express.static(path.join(__dirname, "uploads")));
+app.use("/api/download", express.static(path.join(__dirname, "decrypt")));
 const mainRouter = require("./src/router/mainRouter");
 app.use("/api", mainRouter);
 async function main() {
@@ -25,3 +26,4 @@ async function main() {
   }
 }
 main();
+
