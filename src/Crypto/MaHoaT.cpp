@@ -2,6 +2,7 @@
 #include<pbc.h>
 #include<stdio.h>
 #include<fstream>
+#include <cstring>
 #include <sstream>
 #include<vector>
 #define maxn 200
@@ -93,11 +94,11 @@ int main(int argc, char *argv[]) {
     freopen("dauvao.txt", "rt", stdin);
     string m = "";
 
-    for(int i = 2; i < argc;i++) {
+    for(int i = 3; i < argc;i++) {
         m += argv[i];
     }
     SETUP_PARAMS();
     setup();
     xulydauvao(m);
-    Encryption(argv[1]);
+    Encryption(argv[2]);
 }

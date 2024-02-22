@@ -4,6 +4,7 @@
 #include<fstream>
 #include <sstream>
 #include<vector>
+#include <cstring>
 #define maxn 200
 using namespace std;
 pairing_t pairing;

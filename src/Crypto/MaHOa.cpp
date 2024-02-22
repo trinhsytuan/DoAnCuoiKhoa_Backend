@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<fstream>
 #include <sstream>
+#include <cstring>
 #include<vector>
 #define maxn 200
 using namespace std;
