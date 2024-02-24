@@ -7,4 +7,5 @@ cd src/Crypto
 g++ -o GiaiMa GiaiMa.cpp -lgmp -lpbc
 g++ -o MaHoa MaHoa.cpp -lgmp -lpbc
 g++ -o MaHoaT MaHoaT.cpp -lgmp -lpbc
+cd ../../
 forever restartall
