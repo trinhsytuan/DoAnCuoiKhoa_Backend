@@ -14,6 +14,7 @@ echo "Bước 2: Frontend"
 cd /home/tsharesytuannet/tshare.sytuan.net/public_html
 echo "Clone lại"
 rm -rf DoAnCuoiKhoa_FrontEnd
+rm *
 git clone git@github.com:trinhsytuan/DoAnCuoiKhoa_FrontEnd.git
 cd DoAnCuoiKhoa_FrontEnd
 echo "Bước 3: yarn install"
