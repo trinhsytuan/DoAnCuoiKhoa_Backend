@@ -7,18 +7,44 @@ const {
   handleUpdatePopulate,
 } = require("../../config/baseChung");
 const { fileModelSchema } = require("../../model/fileModel");
-const { EncryptionBGW, DecryptionBGW, ReEncryptionBGW } = require("../../Crypto/process");
+const {
+  EncryptionBGW,
+  DecryptionBGW,
+  ReEncryptionBGW,
+} = require("../../Crypto/process");
 const path = require("path");
 const { imageUpload } = require("../../utils/uploadImage");
 const util = require("util");
-const { convertStringToByte, unlinkFile } = require("../../utils/utils");
+const {
+  convertStringToByte,
+  unlinkFile,
+  searchLike,
+} = require("../../utils/utils");
 const { FILETYPE_ROLE, recordNewUpdate } = require("../../constant/constant");
 const { privateKey } = require("../../constant/privateKey");
 require("dotenv").config();
 const uploadMiddleware = util.promisify(imageUpload.single("file"));
-const findFileByCategory = async(req, res) => {
-
-}
+const findFileByCategory = async (req, res) => {
+  const { category, fileName, share } = req.body;
+  try {
+    let search = {};
+    if (category) search.category = category;
+    if (fileName) search.fileName = searchLike(fileName);
+    if (req?.decodeToken?._id && !share) search.userOwn = req.decodeToken._id;
+    else if (share && req?.decodeToken?._id)
+      search.$or = [
+        { userOwn: req.decodeToken._id },
+        { userDecription: req.decodeToken._id },
+      ];
+    const response = await fileModelSchema.find(search);
+    res.status(200).json(response);
+  } catch (e) {
+    return res.status(400).json({
+      message: e.toString(),
+      success: false,
+    });
+  }
+};
 const createNewFile = async (req, res) => {
   await uploadMiddleware(req, res);
   const dataParse = req.body.category;
@@ -67,22 +93,27 @@ const shareFile = async (req, res) => {
   const { id } = req.params;
   const { listUser } = req.body;
   try {
-    const response = await handleUpdatePopulate(fileModelSchema, id, {userDecription: listUser}, "userDecription", "users");
+    const response = await handleUpdatePopulate(
+      fileModelSchema,
+      id,
+      { userDecription: listUser },
+      "userDecription",
+      "users"
+    );
     let tepgiaima = "";
     for (let i = 0; i < response?.userDecription?.length; i++) {
-      if (i == 0) tepgiaima += (response?.userDecription[i].idCrypto + 1);
+      if (i == 0) tepgiaima += response?.userDecription[i].idCrypto + 1;
       else tepgiaima += " " + (response?.userDecription[i].idCrypto + 1);
     }
-    ReEncryptionBGW(response.tRandom, tepgiaima, async(key) => {
+    ReEncryptionBGW(response.tRandom, tepgiaima, async (key) => {
       const keyarr = key.split("\n");
       const resUpdate = await handleUpdate(fileModelSchema, id, {
         userDecription: listUser,
         C1: keyarr[0],
-        C2: keyarr[1]
-      })
+        C2: keyarr[1],
+      });
       return res.status(200).json(resUpdate);
-    })
-    
+    });
   } catch (e) {
     return res.status(404).json({
       success: false,
@@ -108,7 +139,7 @@ const downloadInFile = async (req, res) => {
     const privateKeys = privateKey[idCrypto + 1];
     let tepgiaima = "";
     for (let i = 0; i < response?.userDecription?.length; i++) {
-      if (i == 0) tepgiaima += (response?.userDecription[i].idCrypto + 1);
+      if (i == 0) tepgiaima += response?.userDecription[i].idCrypto + 1;
       else tepgiaima += "," + (response?.userDecription[i].idCrypto + 1);
     }
     const keyAES = DecryptionBGW(
@@ -170,7 +201,7 @@ const deleteFile = async (req, res) => {
     response?.fileName
   );
   unlinkFile(removeFilePath);
-  res.status(200).json(response)
+  res.status(200).json(response);
 };
 module.exports = {
   createNewFile,
@@ -178,4 +209,5 @@ module.exports = {
   shareFile,
   editFile,
   deleteFile,
+  findFileByCategory,
 };
