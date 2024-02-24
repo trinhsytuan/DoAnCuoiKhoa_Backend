@@ -2,8 +2,8 @@
 #include<pbc.h>
 #include<stdio.h>
 #include<fstream>
-#include <cstring>
 #include <sstream>
+#include <cstring>
 #include<vector>
 #define maxn 200
 using namespace std;
@@ -54,7 +54,7 @@ void setup() {
     element_set_str(paramsGlobal.v, readFile(), PBC_CONVERT_BASE);
     element_clear(paramsGlobal.params[maxn+1]);
 }
-void Encryption(const char* tx) {
+void Encryption(const char*tx) {
     element_t t;
     element_init_Zr(t, pairing);
     element_set_str(t, tx, PBC_CONVERT_BASE);
@@ -79,26 +79,13 @@ void Encryption(const char* tx) {
     element_printf("%B\n", Hdr[1]);
     element_printf("%B\n", t);
 }
-void xulydauvao(string s) {
-    stringstream ss(s);
-    int i;
-
-    while (ss >> i) {
-        slgm.push_back(i);
-        if (ss.peek() == ',')
-            ss.ignore();
-    }
-}
 int main(int argc, char *argv[]) {
     //Quy ước số 1 là tập giải mã
     freopen("dauvao.txt", "rt", stdin);
-    string m = "";
-
-    for(int i = 3; i < argc;i++) {
-        m += argv[i];
+    for(int i = 2; i < argc;i++) {
+        slgm.push_back(stoi(argv[i]));
     }
     SETUP_PARAMS();
     setup();
-    xulydauvao(m);
-    Encryption(argv[2]);
+    Encryption(argv[1]);
 }

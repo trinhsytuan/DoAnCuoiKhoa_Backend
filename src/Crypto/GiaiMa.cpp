@@ -61,12 +61,10 @@ void setup() {
     element_clear(paramsGlobal.params[maxn+1]);
 }
 void xulydauvao(string s) {
-    stringstream ss(s);
+    istringstream ss(s);
     string i;
-    while (ss >> i) {
+    while (getline(ss, i, ',')) {
         slgm.push_back(stoi(i));
-        if (ss.peek() == ',')
-            ss.ignore();
     }
 }
 void Decryption(int PERSON, string khoabimat, string Hdr1, string Hdr2) {

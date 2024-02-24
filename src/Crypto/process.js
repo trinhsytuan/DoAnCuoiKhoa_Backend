@@ -13,12 +13,12 @@ async function EncryptionBGW(idCrypto, callback) {
     }
   );
 }
-function ReEncryptionBGW(t, idCrypto) {
+function ReEncryptionBGW(t, idCrypto, callback) {
   const absoluteFilePath = path.join(__dirname, "MaHoaT");
-  exec(`${absoluteFilePath} ${t} ${idCrypto}`, (error, stdout, stderr) => {
+  exec(`${absoluteFilePath} ${t.replace(/[\[\]]/g, '')} ${idCrypto}`, (error, stdout, stderr) => {
     //Tham so dau ra
     //1 la khoa C1, C2, t
-    return stdout;
+    callback(stdout);
   });
 }
 function DecryptionBGW(idCrypto, tapgiaima, privateKey, C1, C2, callback) {

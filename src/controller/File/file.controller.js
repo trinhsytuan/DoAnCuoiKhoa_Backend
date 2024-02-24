@@ -4,17 +4,21 @@ const {
   handleCreate,
   handleUpdate,
   handleDelete,
+  handleUpdatePopulate,
 } = require("../../config/baseChung");
 const { fileModelSchema } = require("../../model/fileModel");
-const { EncryptionBGW, DecryptionBGW } = require("../../Crypto/process");
+const { EncryptionBGW, DecryptionBGW, ReEncryptionBGW } = require("../../Crypto/process");
 const path = require("path");
 const { imageUpload } = require("../../utils/uploadImage");
 const util = require("util");
 const { convertStringToByte, unlinkFile } = require("../../utils/utils");
-const { FILETYPE_ROLE } = require("../../constant/constant");
+const { FILETYPE_ROLE, recordNewUpdate } = require("../../constant/constant");
 const { privateKey } = require("../../constant/privateKey");
 require("dotenv").config();
 const uploadMiddleware = util.promisify(imageUpload.single("file"));
+const findFileByCategory = async(req, res) => {
+
+}
 const createNewFile = async (req, res) => {
   await uploadMiddleware(req, res);
   const dataParse = req.body.category;
@@ -28,6 +32,7 @@ const createNewFile = async (req, res) => {
   );
   const cipherFile = fs.readFileSync(absoluteFilePath);
   const khoak = await EncryptionBGW(idUser + 1, async (key) => {
+    console.log(key);
     const keyarr = key.split("\n");
     const iv = Buffer.from(process.env.IV_CIPHER, "hex");
     const keyBuffer = await convertStringToByte(keyarr[0]);
@@ -62,10 +67,22 @@ const shareFile = async (req, res) => {
   const { id } = req.params;
   const { listUser } = req.body;
   try {
-    const response = await handleUpdate(fileModelSchema, id, {
-      userDecription: listUser,
-    });
-    return res.status(200).json(response);
+    const response = await handleUpdatePopulate(fileModelSchema, id, {userDecription: listUser}, "userDecription", "users");
+    let tepgiaima = "";
+    for (let i = 0; i < response?.userDecription?.length; i++) {
+      if (i == 0) tepgiaima += (response?.userDecription[i].idCrypto + 1);
+      else tepgiaima += " " + (response?.userDecription[i].idCrypto + 1);
+    }
+    ReEncryptionBGW(response.tRandom, tepgiaima, async(key) => {
+      const keyarr = key.split("\n");
+      const resUpdate = await handleUpdate(fileModelSchema, id, {
+        userDecription: listUser,
+        C1: keyarr[0],
+        C2: keyarr[1]
+      })
+      return res.status(200).json(resUpdate);
+    })
+    
   } catch (e) {
     return res.status(404).json({
       success: false,
@@ -91,8 +108,8 @@ const downloadInFile = async (req, res) => {
     const privateKeys = privateKey[idCrypto + 1];
     let tepgiaima = "";
     for (let i = 0; i < response?.userDecription?.length; i++) {
-      if (i == 0) tepgiaima += response?.userDecription[i].idCrypto + 1;
-      else tepgiaima += "," + response?.userDecription[i].idCrypto + 1;
+      if (i == 0) tepgiaima += (response?.userDecription[i].idCrypto + 1);
+      else tepgiaima += "," + (response?.userDecription[i].idCrypto + 1);
     }
     const keyAES = DecryptionBGW(
       idCrypto + 1,
@@ -126,7 +143,7 @@ const downloadInFile = async (req, res) => {
         } catch (e) {
           return res.status(404).json({
             success: false,
-            message: "Users not permission download file",
+            message: e.toString(),
           });
         }
       }

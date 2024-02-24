@@ -8,4 +8,7 @@ const handleDelete = (model, id) => {
 const handleUpdate = (model, id, data) => {
   return model.findOneAndUpdate({_id: id}, {$set: data}, recordNewUpdate)
 }
-module.exports = { handleCreate, handleDelete, handleUpdate };
+const handleUpdatePopulate = (model, id, data, path, modelPath) => {
+  return model.findOneAndUpdate({_id: id}, {$set: data}, recordNewUpdate).populate({ path, model: modelPath });
+}
+module.exports = { handleCreate, handleDelete, handleUpdate, handleUpdatePopulate };

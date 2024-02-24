@@ -80,26 +80,13 @@ void Encryption() {
     element_printf("%B\n", Hdr[1]);
     element_printf("%B\n", t);
 }
-void xulydauvao(string s) {
-    stringstream ss(s);
-    int i;
-
-    while (ss >> i) {
-        slgm.push_back(i);
-        if (ss.peek() == ',')
-            ss.ignore();
-    }
-}
 int main(int argc, char *argv[]) {
     //Quy ước số 1 là tập giải mã
     freopen("dauvao.txt", "rt", stdin);
-    string m = "";
-
-    for(int i = 2; i < argc;i++) {
-        m += argv[i];
+    for(int i = 1; i < argc;i++) {
+       slgm.push_back(stoi(argv[i]));
     }
     SETUP_PARAMS();
     setup();
-    xulydauvao(m);
     Encryption();
 }
