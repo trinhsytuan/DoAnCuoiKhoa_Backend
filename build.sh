@@ -11,7 +11,7 @@ cd ../../
 forever restartall
 echo "Bước 2: Frontend"
 sudo su
-cd /home/tsharesytuannet/tshare.sytuan.net/public_html
+cd /home/tsharesytuannet/tshare.sytuan.net/public_html/DoAnCuoiKhoa_FrontEnd
 git pull git@github.com:trinhsytuan/DoAnCuoiKhoa_FrontEnd.git
 echo "Bước 3: yarn install"
 yarn install
