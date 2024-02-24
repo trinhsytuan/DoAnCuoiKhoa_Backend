@@ -8,6 +8,7 @@ g++ -o GiaiMa GiaiMa.cpp -lgmp -lpbc
 g++ -o MaHoa MaHoa.cpp -lgmp -lpbc
 g++ -o MaHoaT MaHoaT.cpp -lgmp -lpbc
 cd ../../
+yarn install
 forever restartall
 echo "Bước 2: Frontend"
 cd /home/tsharesytuannet/tshare.sytuan.net/public_html/DoAnCuoiKhoa_FrontEnd
