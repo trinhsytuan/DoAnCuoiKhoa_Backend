@@ -17,5 +17,5 @@ echo "Bước 3: yarn install"
 yarn install
 echo "Bước 4: Build web"
 npm run build
+00
 exit
-cd ~
