@@ -9,7 +9,8 @@ g++ -o MaHoa MaHoa.cpp -lgmp -lpbc
 g++ -o MaHoaT MaHoaT.cpp -lgmp -lpbc
 cd ../../
 yarn install
-forever restartall
+forever stopall
+forever start server.js
 echo "Bước 2: Frontend"
 cd /home/tshare.sytuan.net/public_html
 echo "Clone lại"
