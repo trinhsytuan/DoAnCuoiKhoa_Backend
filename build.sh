@@ -22,5 +22,7 @@ echo "Bước 3: yarn install"
 yarn install
 echo "Bước 4: Build web"
 npm run build
+cd ../
+rm -rf DoAnCuoiKhoa_FrontEnd
 00
 exit
