@@ -11,7 +11,7 @@ cd ../../
 yarn install
 forever restartall
 echo "Bước 2: Frontend"
-cd /home/tsharesytuannet/tshare.sytuan.net/public_html
+cd /home/tshare.sytuan.net/public_html
 echo "Clone lại"
 rm -rf DoAnCuoiKhoa_FrontEnd
 rm -rf node_modules
@@ -24,5 +24,6 @@ echo "Bước 4: Build web"
 npm run build
 cd ../
 rm -rf DoAnCuoiKhoa_FrontEnd
-00
+hocvps
+14
 exit
