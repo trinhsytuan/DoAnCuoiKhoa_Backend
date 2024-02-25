@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     //Quy ước số 1 là tập giải mã
     freopen("dauvao.txt", "rt", stdin);
     for(int i = 1; i < argc;i++) {
-       slgm.push_back(stoi(argv[i]));
+        slgm.push_back(stoi(argv[i]));
     }
     SETUP_PARAMS();
     setup();
