@@ -15,11 +15,10 @@ async function EncryptionBGW(idCrypto, callback) {
 }
 function ReEncryptionBGW(t, idCrypto, callback) {
   const absoluteFilePath = path.join(__dirname, "MaHoaT");
-  console.log(`${t.replace(/[\[\]]/g, '')} ${idCrypto}`);
   exec(`${absoluteFilePath} ${t.replace(/[\[\]]/g, '')} ${idCrypto}`, (error, stdout, stderr) => {
     //Tham so dau ra
     //1 la khoa C1, C2, t
-    console.log(stdout);
+    
     
     callback(stdout);
   });
