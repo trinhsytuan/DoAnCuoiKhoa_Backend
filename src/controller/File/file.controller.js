@@ -31,7 +31,10 @@ const findFileByCategory = async (req, res) => {
     if (category) search.category = category;
     if (fileName) search.fileName = searchLike(fileName);
     if (req?.decodeToken?._id && !share) search.userOwn = req.decodeToken._id;
-    else if (share) search.userDecription = req.decodeToken._id;
+    else if (share) {
+      search.userDescription = share;
+      search.userOwn = { $ne: share };
+    }
     const response = await fileModelSchema.find(search);
     res.status(200).json(response);
   } catch (e) {
@@ -43,8 +46,12 @@ const findFileByCategory = async (req, res) => {
 };
 const createNewFile = async (req, res) => {
   await uploadMiddleware(req, res);
-  const dataParse = req.body.category;
+  let dataParse = null;
+  if (req?.body?.category && req?.body?.category != "null") {
+    dataParse = req?.body?.category;
+  }
   const FileNameOrigin = req.file.filename;
+  const fileNameSave = req?.body?.fileName;
   const idUser = req.decodeToken.idCrypto;
   const absoluteFilePath = path.join(
     __dirname,
@@ -54,7 +61,6 @@ const createNewFile = async (req, res) => {
   );
   const cipherFile = fs.readFileSync(absoluteFilePath);
   const khoak = await EncryptionBGW(idUser + 1, async (key) => {
-    console.log(key);
     const keyarr = key.split("\n");
     const iv = Buffer.from(process.env.IV_CIPHER, "hex");
     const keyBuffer = await convertStringToByte(keyarr[0]);
@@ -71,17 +77,18 @@ const createNewFile = async (req, res) => {
     );
     fs.writeFileSync(ToFilePath, encryptedData);
     unlinkFile(absoluteFilePath);
-    const response = await handleCreate(fileModelSchema, {
+    let objPush = {
       fileName: FileNameOrigin,
       userOwn: req.decodeToken._id,
       tRandom: keyarr[3],
       C1: keyarr[1],
       C2: keyarr[2],
       userDecription: [req.decodeToken._id],
-      category: dataParse,
       fileType: FILETYPE_ROLE.FILE,
-      originalFilename: req.file.originalname,
-    });
+      originalFilename: fileNameSave,
+    };
+    if (dataParse) objPush.category = dataParse;
+    const response = await handleCreate(fileModelSchema, objPush);
     res.status(200).json(response);
   });
 };

@@ -18,8 +18,7 @@ const fileModel = new mongoose.Schema(
     ],
     category: {
       ref: "category",
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId
     },
     fileType: {
       type: String,
