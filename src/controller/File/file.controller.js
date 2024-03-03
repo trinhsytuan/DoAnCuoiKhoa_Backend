@@ -169,7 +169,7 @@ const downloadInFile = async (req, res) => {
           fs.writeFileSync(ToFilePath, encryptedData);
           res.setHeader(
             "Content-disposition",
-            `attachment; filename=${response?.originalFilename}`
+            `attachment; filename=downloadFile`
           );
           res.setHeader("Content-type", "application/octet-stream");
           const fileStream = fs.createReadStream(ToFilePath);
