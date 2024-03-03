@@ -27,5 +27,4 @@ npm run build
 cd ../
 rm -rf DoAnCuoiKhoa_FrontEnd
 hocvps
-14
 exit
