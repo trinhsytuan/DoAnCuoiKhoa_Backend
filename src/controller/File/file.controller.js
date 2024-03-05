@@ -25,17 +25,17 @@ const { privateKey } = require("../../constant/privateKey");
 require("dotenv").config();
 const uploadMiddleware = util.promisify(imageUpload.single("file"));
 const findFileByCategory = async (req, res) => {
-  const { category, fileName, share } = req.query;
+  const { category, file_name, share } = req.query;
   try {
     let search = {};
     if (category) search.category = category;
-    if (fileName) search.fileName = searchLike(fileName);
+    if (file_name) search.originalFilename = searchLike({like: file_name});
     if (req?.decodeToken?._id && !share) search.userOwn = req.decodeToken._id;
     else if (share) {
       search.userDescription = share;
       search.userOwn = { $ne: share };
     }
-    const response = await fileModelSchema.find(search);
+    const response = await fileModelSchema.find(search).populate({ path: "category", model: "category" });
     res.status(200).json(response);
   } catch (e) {
     return res.status(400).json({

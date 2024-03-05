@@ -6,6 +6,7 @@ const {
   getMyInfo,
   updateMyInfo,
   changeNewPassword,
+  getAllUser,
 } = require("./userController");
 const { checkToken } = require("../../utils/utils");
 const { imageUpload } = require("../../utils/uploadImage");
@@ -20,4 +21,5 @@ router.put(
   updateMyInfo
 );
 router.put("/changePassword", checkToken, changeNewPassword);
+router.get("/getAllUser", checkToken, getAllUser);
 module.exports = router;

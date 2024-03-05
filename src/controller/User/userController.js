@@ -84,7 +84,9 @@ const updateMyInfo = async (req, res) => {
 };
 const changeNewPassword = async (req, res) => {
   try {
-    const infoDataUser = await userModelSchema.findOne({ _id: req.decodeToken._id });
+    const infoDataUser = await userModelSchema.findOne({
+      _id: req.decodeToken._id,
+    });
     const statusCode = await comparePasswords(
       req.body.old_password,
       infoDataUser.password
@@ -106,4 +108,26 @@ const changeNewPassword = async (req, res) => {
     res.status(400).json({ success: false, message: e.toString() });
   }
 };
-module.exports = { signUp, signIn, getMyInfo, updateMyInfo, changeNewPassword };
+const getAllUser = async (req, res) => {
+  try {
+    const users = await userModelSchema.find({});
+    const userMap = [];
+    users.forEach((user) => {
+      userMap.push(user);
+    });
+    return res.status(200).json(userMap);
+  } catch (e) {
+    return res.status(402).json({
+      message: e.toString(),
+      success: false,
+    });
+  }
+};
+module.exports = {
+  signUp,
+  signIn,
+  getMyInfo,
+  updateMyInfo,
+  changeNewPassword,
+  getAllUser,
+};
