@@ -29,13 +29,15 @@ const findFileByCategory = async (req, res) => {
   try {
     let search = {};
     if (category) search.category = category;
-    if (file_name) search.originalFilename = searchLike({like: file_name});
+    if (file_name) search.originalFilename = searchLike({ like: file_name });
     if (req?.decodeToken?._id && !share) search.userOwn = req.decodeToken._id;
     else if (share) {
       search.userDescription = share;
       search.userOwn = { $ne: share };
     }
-    const response = await fileModelSchema.find(search).populate({ path: "category", model: "category" });
+    const response = await fileModelSchema
+      .find(search)
+      .populate({ path: "category", model: "category" });
     res.status(200).json(response);
   } catch (e) {
     return res.status(400).json({
@@ -189,6 +191,72 @@ const downloadInFile = async (req, res) => {
     });
   }
 };
+const playVideoFile = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await fileModelSchema
+      .findById(id)
+      .populate({ path: "userDecription", model: "users" });
+    const CipherFilePath = path.join(
+      __dirname,
+      "../../../",
+      "uploads/cipher",
+      response.fileName
+    );
+    const cipherFile = fs.readFileSync(CipherFilePath);
+    const idCrypto = req.decodeToken.idCrypto;
+
+    const privateKeys = privateKey[idCrypto + 1];
+    let tepgiaima = "";
+    for (let i = 0; i < response?.userDecription?.length; i++) {
+      if (i == 0) tepgiaima += response?.userDecription[i].idCrypto + 1;
+      else tepgiaima += "," + (response?.userDecription[i].idCrypto + 1);
+    }
+    const keyAES = DecryptionBGW(
+      idCrypto + 1,
+      tepgiaima,
+      privateKeys,
+      response.C1,
+      response.C2,
+      async (key) => {
+        try {
+          const iv = Buffer.from(process.env.IV_CIPHER, "hex");
+          const keyBuffer = await convertStringToByte(key);
+          const cipher = crypto.createDecipheriv("aes-256-cbc", keyBuffer, iv);
+          const encryptedData = Buffer.concat([
+            cipher.update(cipherFile),
+            cipher.final(),
+          ]);
+          const ToFilePath = path.join(
+            __dirname,
+            "../../../",
+            "decrypt",
+            response.fileName
+          );
+          fs.writeFileSync(ToFilePath, encryptedData);
+          res.removeHeader("Content-disposition");
+          res.removeHeader("Content-type");
+
+          // Thiết lập header cho video
+          res.setHeader("Content-type", "video/mp4");
+
+          const fileStream = fs.createReadStream(ToFilePath);
+          fileStream.pipe(res);
+        } catch (e) {
+          return res.status(404).json({
+            success: false,
+            message: e.toString(),
+          });
+        }
+      }
+    );
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      message: e.toString(),
+    });
+  }
+};
 const editFile = async (req, res) => {
   const { id } = req.params;
   const response = await handleUpdate(fileModelSchema, id, req.body);
@@ -213,4 +281,5 @@ module.exports = {
   editFile,
   deleteFile,
   findFileByCategory,
+  playVideoFile
 };

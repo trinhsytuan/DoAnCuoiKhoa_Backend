@@ -8,6 +8,7 @@ const {
   deleteFile,
   editFile,
   findFileByCategory,
+  playVideoFile,
 } = require("./file.controller");
 const { imageUpload } = require("../../utils/uploadImage");
 
@@ -18,4 +19,5 @@ router.get("/download/:id", checkToken, downloadInFile);
 router.put("/shareFile/:id", checkToken, shareFile);
 router.delete("/deleteFile/:id", checkToken, deleteFile);
 router.put("/update/:id", checkToken, editFile);
+router.get("/playVideo/:id", checkToken, playVideoFile)
 module.exports = router;

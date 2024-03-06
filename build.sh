@@ -22,7 +22,6 @@ cd DoAnCuoiKhoa_FrontEnd
 echo "Bước 3: yarn install"
 yarn install
 echo "Bước 4: Build web"
-cd DoAnCuoiKhoa_FrontEnd
 npm run build
 cd ../
 rm -rf DoAnCuoiKhoa_FrontEnd
