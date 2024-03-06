@@ -32,7 +32,7 @@ const findFileByCategory = async (req, res) => {
     if (file_name) search.originalFilename = searchLike({ like: file_name });
     if (req?.decodeToken?._id && !share) search.userOwn = req.decodeToken._id;
     else if (share) {
-      search.userDescription = share;
+      search.userDecription = share;
       search.userOwn = { $ne: share };
     }
     const response = await fileModelSchema
