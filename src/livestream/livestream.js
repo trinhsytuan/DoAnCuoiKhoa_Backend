@@ -8,6 +8,7 @@ function createLiveStream(key) {
       gop_cache: true,
       ping: 30,
       ping_timeout: 60,
+      allow_origin: "*"
     },
     http: {
       port: 8000,
