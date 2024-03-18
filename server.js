@@ -12,6 +12,7 @@ app.use(cors({ credentials: true, origin: "*" }));
 app.use("/api/static", express.static(path.join(__dirname, "uploads")));
 app.use("/api/download", express.static(path.join(__dirname, "decrypt")));
 const mainRouter = require("./src/router/mainRouter");
+const { createLiveStream } = require("./src/livestream/livestream");
 app.use("/api", mainRouter);
 async function main() {
   try {
@@ -25,5 +26,6 @@ async function main() {
     process.exit();
   }
 }
+createLiveStream("TUAN")
 main();
 
