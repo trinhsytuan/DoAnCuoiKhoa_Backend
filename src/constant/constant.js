@@ -28,6 +28,17 @@ const FILETYPE_ROLE = {
     VIDEO: "video",
     LIVESTREAM: "livestream"
 }
+const TYPE_MEMBER = {
+    ACCEPT: "accept",
+    PENDING: "pending",
+    REJECT: "reject"
+}
+const STATUS_COMMENT = {
+    ACCEPT: "accept",
+    PENDING: "pending",
+    REJECT: "reject"
+
+}
 module.exports = {
     ROLE_SYSTEM,
     WRONG_PASSWORD,
@@ -36,6 +47,8 @@ module.exports = {
     sort_time,
     STATUS_TD,
     CHUA_DU_THONG_TIN,
-    FILETYPE_ROLE
+    FILETYPE_ROLE,
+    TYPE_MEMBER,
+    STATUS_COMMENT
 
 };
