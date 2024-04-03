@@ -1,11 +1,12 @@
 const { default: mongoose } = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
-const requestJoin = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
   {
-    content: { type: String, required: true },
+    content: { type: String},
     idGroup: {
       ref: "group",
       type: mongoose.Schema.Types.ObjectId,
+      required: true 
     },
     status: { type: String },
     attachment: [
@@ -14,6 +15,11 @@ const requestJoin = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
       },
     ],
+    userOwn: {
+      ref: "user",
+      type: mongoose.Schema.Types.ObjectId,
+      required: true 
+    },
     type: {type: String, require: true},
     tRandom: { type: String },
     C1: { type: String },
@@ -22,6 +28,6 @@ const requestJoin = new mongoose.Schema(
   },
   { timestamps: true }
 );
-requestJoin.plugin(mongoosePaginate);
-const requestJoinModel = mongoose.model("group", requestJoin);
-module.exports = { requestJoinModel };
+postSchema.plugin(mongoosePaginate);
+const postModel = mongoose.model("posts", postSchema);
+module.exports = { postModel };

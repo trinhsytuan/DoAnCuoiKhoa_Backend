@@ -39,6 +39,10 @@ const STATUS_COMMENT = {
     REJECT: "reject"
 
 }
+const TYPE_POST = {
+    POST: "post",
+    LIVE: "live"
+}
 module.exports = {
     ROLE_SYSTEM,
     WRONG_PASSWORD,
@@ -49,6 +53,7 @@ module.exports = {
     CHUA_DU_THONG_TIN,
     FILETYPE_ROLE,
     TYPE_MEMBER,
-    STATUS_COMMENT
+    STATUS_COMMENT,
+    TYPE_POST
 
 };
