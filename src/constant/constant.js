@@ -26,7 +26,8 @@ const CHUA_DU_THONG_TIN = {
 const FILETYPE_ROLE = {
     FILE: "file",
     VIDEO: "video",
-    LIVESTREAM: "livestream"
+    LIVESTREAM: "livestream",
+    IMAGE: "image"
 }
 const TYPE_MEMBER = {
     ACCEPT: "accept",

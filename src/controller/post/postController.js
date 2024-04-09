@@ -49,6 +49,7 @@ const getKeyLivestream = async (req, res) => {
 };
 const addPost = async (req, res) => {
   const { content, idGroup, attachment } = req.body;
+  console.log(req.body);
   const id = req.decodeToken._id;
   const response = await handleCreate(postModel, {
     content,

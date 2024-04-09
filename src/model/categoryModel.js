@@ -7,6 +7,7 @@ const categoryModel = new mongoose.Schema(
       ref: "users",
       type: mongoose.Schema.Types.ObjectId,
     },
+  
     
   },
   { timestamps: true }

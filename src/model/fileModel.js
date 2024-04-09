@@ -22,7 +22,7 @@ const fileModel = new mongoose.Schema(
     },
     fileType: {
       type: String,
-      enum: [FILETYPE_ROLE.FILE, FILETYPE_ROLE.LIVESTREAM, FILETYPE_ROLE.VIDEO],
+      enum: [FILETYPE_ROLE.FILE, FILETYPE_ROLE.LIVESTREAM, FILETYPE_ROLE.VIDEO, FILETYPE_ROLE.IMAGE],
       required: true,
     },
   },

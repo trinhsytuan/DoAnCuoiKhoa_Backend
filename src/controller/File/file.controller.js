@@ -274,6 +274,26 @@ const deleteFile = async (req, res) => {
   unlinkFile(removeFilePath);
   res.status(200).json(response);
 };
+const uploadImage = async (req, res) => {
+  const { category } = JSON.parse(req.body.jsonData);
+  const userID = req.decodeToken._id;
+  const newData = {};
+  if (req?.file?.filename) {
+    newData.fileName = req.file.filename;
+    newData.originalFilename = req.file.fileName;
+  }
+  newData.fileType = FILETYPE_ROLE.IMAGE;
+  newData.userOwn = userID;
+  newData.category = category;
+  const response = await handleCreate(fileModelSchema, newData);
+
+  return res.status(200).json(response);
+};
+const removeImage = async (req, res) => {
+  const { id } = req.params;
+  const response = await handleDelete(fileModelSchema, id);
+  return response;
+};
 module.exports = {
   createNewFile,
   downloadInFile,
@@ -281,5 +301,7 @@ module.exports = {
   editFile,
   deleteFile,
   findFileByCategory,
-  playVideoFile
+  playVideoFile,
+  uploadImage,
+  removeImage
 };
