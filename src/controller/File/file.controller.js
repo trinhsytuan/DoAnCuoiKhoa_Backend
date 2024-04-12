@@ -52,8 +52,10 @@ const createNewFile = async (req, res) => {
   if (req?.body?.category && req?.body?.category != "null") {
     dataParse = req?.body?.category;
   }
+  const jsonParse = req?.body?.jsonData ? JSON.parse(req.body?.jsonData) : null;
+  let postId = jsonParse?.postId;
   const FileNameOrigin = req.file.filename;
-  const fileNameSave = req?.body?.fileName;
+  const fileNameSave = req?.body?.fileName || jsonParse?.originalFilename;
   const idUser = req.decodeToken.idCrypto;
   const absoluteFilePath = path.join(
     __dirname,
@@ -88,6 +90,7 @@ const createNewFile = async (req, res) => {
       userDecription: [req.decodeToken._id],
       fileType: FILETYPE_ROLE.FILE,
       originalFilename: fileNameSave,
+      postId,
     };
     if (dataParse) objPush.category = dataParse;
     const response = await handleCreate(fileModelSchema, objPush);
@@ -275,7 +278,7 @@ const deleteFile = async (req, res) => {
   res.status(200).json(response);
 };
 const uploadImage = async (req, res) => {
-  const { category } = JSON.parse(req.body.jsonData);
+  const { postId } = JSON.parse(req.body.jsonData);
   const userID = req.decodeToken._id;
   const newData = {};
   if (req?.file?.filename) {
@@ -284,7 +287,7 @@ const uploadImage = async (req, res) => {
   }
   newData.fileType = FILETYPE_ROLE.IMAGE;
   newData.userOwn = userID;
-  newData.category = category;
+  newData.postId = postId;
   const response = await handleCreate(fileModelSchema, newData);
 
   return res.status(200).json(response);

@@ -106,6 +106,9 @@ function unlinkFile(filePath) {
     if (err) console.log(err);
   });
 }
+function cloneObj(input = {}) {
+  return JSON.parse(JSON.stringify(input));
+}
 module.exports = {
   makeid,
   hashPassword,
@@ -122,4 +125,5 @@ module.exports = {
   checkMessageDuplicateMongo,
   checkMessageDuplicateMongoAutoRender,
   convertStringToByte,
+  cloneObj
 };

@@ -6,7 +6,6 @@ const postSchema = new mongoose.Schema(
     idGroup: {
       ref: "group",
       type: mongoose.Schema.Types.ObjectId,
-      required: true 
     },
     status: { type: String },
     attachment: [
@@ -15,8 +14,14 @@ const postSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
       },
     ],
+    comment: [
+      {
+        ref: "comment",
+        type: mongoose.Schema.Types.ObjectId,
+      }
+    ],
     userOwn: {
-      ref: "user",
+      ref: "users",
       type: mongoose.Schema.Types.ObjectId,
       required: true 
     },
