@@ -4,7 +4,7 @@ const { commentModel } = require("../../model/comment");
 
 const createComment = async (req, res) => {
     const {contentComment, postId} = req.body;
-    const userComment = req.user._id;
+    const userComment = req.decodeToken._id;
     const response = await handleCreate(commentModel, {contentComment, postId, userComment, status: STATUS_COMMENT.PENDING});
     res.status(200).json(response);
 }

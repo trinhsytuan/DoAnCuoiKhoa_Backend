@@ -11,7 +11,7 @@ const commentSchema = new mongoose.Schema(
       ref: "users",
       type: mongoose.Schema.Types.ObjectId,
     },
-    status: { type: Boolean, default: true },
+    status: { type: String },
   },
   { timestamps: true }
 );
