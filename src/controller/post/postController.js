@@ -82,28 +82,16 @@ const addPost = async (req, res) => {
   res.status(200).json(responseUpdate);
 };
 const editPost = async (req, res) => {
-  const { content, attachment } = req.body;
-  const { id } = req.query;
+  const { content } = req.body;
+  const { id } = req.params;
   const response = await handleUpdate(postModel, id, {
     content,
-    attachment,
   });
-  const createReCrypto = ReEncryptionBGW(
-    "tRandom",
-    "tepgiaima",
-    async (key) => {
-      const keyarr = key.split("\n");
-      return {
-        C1: keyarr[0],
-        C2: keyarr[1],
-      };
-    }
-  );
-
   return res.status(200).json(response);
 };
 const deletePost = async (req, res) => {
-  const { id } = req.query;
+  
+  const { id } = req.params;
   const response = await handleDelete(postModel, id);
   return res.status(200).json(response);
 };
@@ -136,11 +124,11 @@ const getPostByCategory = async (req, res) => {
   const { id } = req.params;
   let responsePost = await postModel
     .find({ idGroup: id })
-    .populate({ path: "userOwn" });
+    .populate({ path: "userOwn" }).sort({createdAt: -1})
   let newPost = cloneObj(responsePost);
   for(let i = 0; i < newPost.length;i++) {
     newPost[i].attachment = await fileModelSchema.find({postId: responsePost[i]?._id});
-    newPost[i].comment = await commentModel.find({postId: responsePost[i]?._id});
+    newPost[i].comment = await commentModel.find({postId: responsePost[i]?._id}).populate("userComment");
   }
   return res.status(200).json(newPost);
 };
