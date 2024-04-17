@@ -26,6 +26,5 @@ async function main() {
     process.exit();
   }
 }
-createLiveStream("TUAN")
 main();
 

@@ -30,6 +30,7 @@ function DecryptionBGW(idCrypto, tapgiaima, privateKey, C1, C2, callback) {
     (error, stdout, stderr) => {
       //Tham so dau ra
       //1 la khoa K, C1, C2, t
+      //console.log(stdout, stderr);
       callback(stdout);
     }
   );

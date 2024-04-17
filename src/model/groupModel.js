@@ -6,7 +6,7 @@ const groupSchema = new mongoose.Schema(
     member: [{
       ref: "users",
       type: mongoose.Schema.Types.ObjectId,
-    }],
+    }],    
     userCreator: {
       ref: "users",
       type: mongoose.Schema.Types.ObjectId,
@@ -15,5 +15,5 @@ const groupSchema = new mongoose.Schema(
   { timestamps: true }
 );
 groupSchema.plugin(mongoosePaginate);
-const groupModel = mongoose.model("group", groupSchema);
+const groupModel = mongoose.model("groupssss", groupSchema);
 module.exports = { groupModel };

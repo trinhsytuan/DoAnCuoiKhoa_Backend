@@ -22,6 +22,7 @@ const {
 } = require("../../utils/utils");
 const { FILETYPE_ROLE, recordNewUpdate } = require("../../constant/constant");
 const { privateKey } = require("../../constant/privateKey");
+const { getAllMember } = require("../group/groupController");
 require("dotenv").config();
 const uploadMiddleware = util.promisify(imageUpload.single("file"));
 const findFileByCategory = async (req, res) => {
@@ -91,10 +92,74 @@ const createNewFile = async (req, res) => {
       fileType: FILETYPE_ROLE.FILE,
       originalFilename: fileNameSave,
       postId,
+      category: jsonParse?.category,
     };
     if (dataParse) objPush.category = dataParse;
     const response = await handleCreate(fileModelSchema, objPush);
     res.status(200).json(response);
+  });
+};
+const createNewFileInPost = async (req, res) => {
+  await uploadMiddleware(req, res);
+  let dataParse = null;
+  if (req?.body?.category && req?.body?.category != "null") {
+    dataParse = req?.body?.category;
+  }
+  const jsonParse = req?.body?.jsonData ? JSON.parse(req.body?.jsonData) : null;
+  let postId = jsonParse?.postId;
+  const FileNameOrigin = req.file.filename;
+  const fileNameSave = req?.body?.fileName || jsonParse?.originalFilename;
+  const idUser = req.decodeToken.idCrypto;
+  const absoluteFilePath = path.join(
+    __dirname,
+    "../../../",
+    "uploads",
+    FileNameOrigin
+  );
+  const cipherFile = fs.readFileSync(absoluteFilePath);
+  const khoak = await EncryptionBGW(idUser + 1, async (key) => {
+    const keyarr = key.split("\n");
+    const iv = Buffer.from(process.env.IV_CIPHER, "hex");
+    const keyBuffer = await convertStringToByte(keyarr[0]);
+    const cipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, iv);
+    const encryptedData = Buffer.concat([
+      cipher.update(cipherFile),
+      cipher.final(),
+    ]);
+    const ToFilePath = path.join(
+      __dirname,
+      "../../../",
+      "uploads/cipher",
+      FileNameOrigin
+    );
+    fs.writeFileSync(ToFilePath, encryptedData);
+    const getAllMemberGroup = await getAllMember(jsonParse?.category);
+    let memberId = [];
+    let tepgiaima = "";
+    for (let i = 0; i < getAllMemberGroup?.member.length; i++) {
+      memberId.push(getAllMemberGroup?.member[i]?._id.toString());
+      if (i == 0) tepgiaima += getAllMemberGroup?.member[i]?.idCrypto + 1;
+      else tepgiaima += " " + (getAllMemberGroup?.member[i]?.idCrypto + 1);
+    }
+    unlinkFile(absoluteFilePath);
+    ReEncryptionBGW(keyarr[3], tepgiaima, async (keyNew) => {
+      const keyarrNew = keyNew.split("\n");
+      let objPush = {
+        fileName: FileNameOrigin,
+        userOwn: req.decodeToken._id,
+        tRandom: keyarr[3],
+        C1: keyarrNew[0],
+        C2: keyarrNew[1],
+        userDecription: memberId,
+        fileType: FILETYPE_ROLE.FILE,
+        originalFilename: fileNameSave,
+        postId,
+        category: jsonParse?.category,
+      };
+      if (dataParse) objPush.category = dataParse;
+      const response = await handleCreate(fileModelSchema, objPush);
+      res.status(200).json(response);
+    });
   });
 };
 const shareFile = async (req, res) => {
@@ -108,6 +173,7 @@ const shareFile = async (req, res) => {
       "userDecription",
       "users"
     );
+
     let tepgiaima = "";
     for (let i = 0; i < response?.userDecription?.length; i++) {
       if (i == 0) tepgiaima += response?.userDecription[i].idCrypto + 1;
@@ -306,5 +372,6 @@ module.exports = {
   findFileByCategory,
   playVideoFile,
   uploadImage,
-  removeImage
+  removeImage,
+  createNewFileInPost,
 };

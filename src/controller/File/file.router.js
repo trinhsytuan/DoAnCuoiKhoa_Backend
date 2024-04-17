@@ -11,12 +11,14 @@ const {
   playVideoFile,
   uploadImage,
   removeImage,
+  createNewFileInPost,
 } = require("./file.controller");
 const { imageUpload } = require("../../utils/uploadImage");
 
 const router = express.Router();
 router.get("/getAll", checkToken, findFileByCategory);
 router.post("/upload", checkToken, createNewFile);
+router.post('/upload-in-post', checkToken, createNewFileInPost)
 router.get("/download/:id", checkToken, downloadInFile);
 router.put("/shareFile/:id", checkToken, shareFile);
 router.delete("/deleteFile/:id", checkToken, deleteFile);

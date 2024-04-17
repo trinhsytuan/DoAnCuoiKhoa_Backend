@@ -36,13 +36,14 @@ const getKeyLivestream = async (req, res) => {
   const id = req.decodeToken._id;
   const { idGroup } = req.body;
 
-  const getMemberOfGroup = getAllMember(idGroup);
+  const getMemberOfGroup = await getAllMember(idGroup);
   let tepgiaima = "";
   for (let i = 0; i < getMemberOfGroup?.member?.length; i++) {
     if (i == 0) tepgiaima += getMemberOfGroup?.member[i].idCrypto + 1;
     else tepgiaima += " " + (getMemberOfGroup?.member[i].idCrypto + 1);
   }
   const getKeyFromBGW = await EncryptionBGW(tepgiaima, async (key) => {
+    
     const keyarr = key.split("\n");
     const newObj = {
       tRandom: keyarr[3],
@@ -50,6 +51,7 @@ const getKeyLivestream = async (req, res) => {
       C2: keyarr[2],
       khoak: keyarr[0],
     };
+    //1079473318536703928399446065661114269795226605773346410768253846962914507291363172161633319435042811700577748167555959713548165922990474951209866630419027, 5993655099796056935755896585030266123980866055781299887247020039630225808013328163759985483525655566475698980125262541182064992208164452481552319523041350
     const keyLivestream = await genKey(newObj?.khoak);
     createLiveStream(keyLivestream.livestreamKey);
     const responeDb = await handleCreate(postModel, {
@@ -140,7 +142,7 @@ const getLivestream = async (req, res) => {
   const idUser = req.decodeToken._id;
   const { id } = req.params;
   const infoLivestream = await postModel.findOne({ _id: id });
-  const userGroup = await groupModel.find({ _id: infoLivestream.idGroup });
+  const userGroup = await getAllMember(infoLivestream.idGroup);
   let tepgiaima = "";
   for (let i = 0; i < userGroup?.member?.length; i++) {
     if (i == 0) tepgiaima += userGroup?.member[i]?.idCrypto + 1;
@@ -148,8 +150,8 @@ const getLivestream = async (req, res) => {
   }
   const privateKeys = privateKey[idCrypto + 1];
   DecryptionBGW(
-    idCrypto,
-    id,
+    idCrypto + 1,
+    tepgiaima,
     privateKeys,
     infoLivestream.C1,
     infoLivestream.C2,

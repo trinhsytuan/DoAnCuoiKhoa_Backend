@@ -15,7 +15,6 @@ function createLiveStream(key) {
       allow_origin: "*",
     },
     auth: {
-      play: true,
       publish: true,
       secret: key,
     },
