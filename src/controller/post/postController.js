@@ -56,10 +56,11 @@ const getKeyLivestream = async (req, res) => {
       idGroup,
       status: STATUS_COMMENT.ACCEPT,
       userOwn: id,
+      type: TYPE_POST.LIVE,
       tRandom: keyarr[3],
       C1: keyarr[1],
       C2: keyarr[2],
-      livestreamName: keyLivestream.streamName,
+      livestreamObjOptions: {streamName: keyLivestream.streamName, expirationTimestamp: keyLivestream.expirationTimestamp},
     });
     return res.status(200).json({ ...responeDb?._doc, ...keyLivestream });
   });
@@ -117,6 +118,7 @@ const genKey = async (key) => {
   return {
     livestreamKey: idStreamKey,
     streamName: idStream,
+    expirationTimestamp,
   };
 };
 
@@ -137,7 +139,7 @@ const getLivestream = async (req, res) => {
   const idCrypto = req.decodeToken.idCrypto;
   const idUser = req.decodeToken._id;
   const { id } = req.params;
-  const infoLivestream = await postModel.find({ _id: id });
+  const infoLivestream = await postModel.findOne({ _id: id });
   const userGroup = await groupModel.find({ _id: infoLivestream.idGroup });
   let tepgiaima = "";
   for (let i = 0; i < userGroup?.member?.length; i++) {
@@ -152,20 +154,9 @@ const getLivestream = async (req, res) => {
     infoLivestream.C1,
     infoLivestream.C2,
     async (e) => {
-      const genKeys = await genKey(e);
-      res.status(200).json(genKeys);
+      res.status(200).json({streamKey: md5(e)});
     }
   );
-  const response = await handleCreate(postModel, {
-    idGroup: infoLivestream?.idGroup,
-    status: STATUS_COMMENT.ACCEPT,
-    userOwn: idUser,
-    type: TYPE_POST.LIVE,
-  });
-  handleUpdate(postModel, response?._id, {
-    attachment: response?._id,
-    comment: response?._id,
-  });
 };
 module.exports = {
   addPost,

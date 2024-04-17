@@ -30,6 +30,7 @@ const postSchema = new mongoose.Schema(
     C1: { type: String },
     C2: { type: String },
     livestreamName: {type: String},
+    livestreamObjOptions: {type: Object}
   },
   { timestamps: true }
 );
