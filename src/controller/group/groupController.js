@@ -1,8 +1,9 @@
 const { ReEncryptionBGW } = require("../../Crypto/process");
 const { handleCreate, handleUpdate } = require("../../config/baseChung");
-const { recordNewUpdate } = require("../../constant/constant");
+const { recordNewUpdate, TYPE_POST } = require("../../constant/constant");
 const { fileModelSchema } = require("../../model/fileModel");
 const { groupModel } = require("../../model/groupModel");
+const { postModel } = require("../../model/postGroup");
 
 const createGroup = async (req, res) => {
   const idUser = req.decodeToken._id;
@@ -70,6 +71,22 @@ const editMember = async (req, res) => {
         recordNewUpdate
       );
     });
+    
+  }
+  const postShema = await postModel.find({type: TYPE_POST.LIVE});
+  for (let i = 0; i < postShema.length; i++) {
+    ReEncryptionBGW(postShema[i]?.tRandom, tepgiaima, async (key) => {
+      const keyarr = key.split("\n");
+      const response = await postModel.findOneAndUpdate(
+        { _id: postShema[i]?._id.toString() },
+        {
+          C1: keyarr[0],
+          C2: keyarr[1],
+        },
+        recordNewUpdate
+      );
+    });
+
   }
 };
 const getAllGroupJoin = async (req, res) => {
