@@ -14,9 +14,9 @@ const {
 const jwt = require("jsonwebtoken");
 const signUp = async (req, res) => {
   try {
-    const { username, password, role_user } = req.body;
+    const { username, password } = req.body;
 
-    if (!username || !password || !role_user) {
+    if (!username || !password ) {
       return res.status(302).json(CHUA_DU_THONG_TIN);
     }
     let idUser = await getIdUser();
@@ -25,7 +25,7 @@ const signUp = async (req, res) => {
     const user = await userModelSchema.create({
       username,
       password: hashPasswords,
-      roleUser: role_user,
+      // roleUser: role_user,
       idCrypto: idUser,
       privateKey: privateKey[idUser],
       publicKey: globalParams[idUser],
