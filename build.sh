@@ -2,7 +2,7 @@
 
 # Bước 1: Git pull
 echo "Bước 1: Git pull"
-git pull git@github.com:trinhsytuan/DoAnCuoiKhoa_Backend.git
+git pull -b NCKH git@github.com:trinhsytuan/DoAnCuoiKhoa_Backend.git
 cd src/Crypto
 g++ -o GiaiMa GiaiMa.cpp -lgmp -lpbc
 g++ -o MaHoa MaHoa.cpp -lgmp -lpbc
@@ -17,7 +17,7 @@ echo "Clone lại"
 rm -rf DoAnCuoiKhoa_FrontEnd
 rm -rf node_modules
 rm *
-git clone git@github.com:trinhsytuan/DoAnCuoiKhoa_FrontEnd.git
+git clone -b NCKH git@github.com:trinhsytuan/DoAnCuoiKhoa_FrontEnd.git
 cd DoAnCuoiKhoa_FrontEnd
 echo "Bước 3: yarn install"
 yarn install
