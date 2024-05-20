@@ -2,7 +2,7 @@
 
 # Bước 1: Git pull
 echo "Bước 1: Git pull"
-git pull -b NCKH git@github.com:trinhsytuan/DoAnCuoiKhoa_Backend.git
+git pull git@github.com:trinhsytuan/DoAnCuoiKhoa_Backend.git
 cd src/Crypto
 g++ -o GiaiMa GiaiMa.cpp -lgmp -lpbc
 g++ -o MaHoa MaHoa.cpp -lgmp -lpbc
