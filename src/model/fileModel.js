@@ -24,6 +24,9 @@ const fileSchema = new mongoose.Schema(
       ref: "category",
       type: mongoose.Schema.Types.ObjectId
     },
+    type: {
+      type: String,
+    },
     fileType: {
       type: String,
       enum: [FILETYPE_ROLE.FILE, FILETYPE_ROLE.LIVESTREAM, FILETYPE_ROLE.VIDEO, FILETYPE_ROLE.IMAGE],

@@ -344,7 +344,7 @@ const deleteFile = async (req, res) => {
   res.status(200).json(response);
 };
 const uploadImage = async (req, res) => {
-  const { postId } = JSON.parse(req.body.jsonData);
+  const { postId, type } = JSON.parse(req.body.jsonData);
   const userID = req.decodeToken._id;
   const newData = {};
   if (req?.file?.filename) {
@@ -354,6 +354,7 @@ const uploadImage = async (req, res) => {
   newData.fileType = FILETYPE_ROLE.IMAGE;
   newData.userOwn = userID;
   newData.postId = postId;
+  newData.type = type;
   const response = await handleCreate(fileModelSchema, newData);
 
   return res.status(200).json(response);
