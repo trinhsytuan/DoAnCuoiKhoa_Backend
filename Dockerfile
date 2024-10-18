@@ -1,7 +1,9 @@
-FROM node:16-alpine3.17
-RUN apk update && apk upgrade && apk add --no-cache git && apk add --no-cache g++ make
+FROM buildpack-deps:buster
 
-ENV PBC_VERSION 0.5.14
+RUN apt-get update && apt-get install -y --no-install-recommends \
+                bison \
+                flex \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
         \
@@ -16,15 +18,20 @@ RUN set -ex \
         && make install \
         && rm -rf /usr/src/pbc
 
+WORKDIR /usr/src/app/src/Crypto
+RUN g++ -o GiaiMa GiaiMa.cpp -lgmp -lpbc
+RUN g++ -o MaHoa MaHoa.cpp -lgmp -lpbc
+RUN g++ -o MaHoaT MaHoaT.cpp -lgmp -lpbc
+
+FROM node:16-alpine3.17
+RUN apk update && apk upgrade && apk add --no-cache git
+
+ENV PBC_VERSION 0.5.14
+
 WORKDIR /usr/src/app
 COPY package.json .
 RUN npm install && npm cache clean --force
 COPY . .
 RUN npm run build
-WORKDIR /usr/src/app/src/Crypto
-RUN g++ -o GiaiMa GiaiMa.cpp -lgmp -lpbc
-RUN g++ -o MaHoa MaHoa.cpp -lgmp -lpbc
-RUN g++ -o MaHoaT MaHoaT.cpp -lgmp -lpbc
-WORKDIR /usr/src/app
 EXPOSE 3000
 CMD ["node", "dist/app.js"]
