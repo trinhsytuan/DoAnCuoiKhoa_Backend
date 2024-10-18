@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
                 flex \
     && rm -rf /var/lib/apt/lists/*
 
+ENV PBC_VERSION 0.5.14
+
 RUN set -ex \
         \
         && wget -O pbc.tar.gz "https://crypto.stanford.edu/pbc/files/pbc-$PBC_VERSION.tar.gz" \
@@ -26,7 +28,7 @@ RUN g++ -o MaHoaT MaHoaT.cpp -lgmp -lpbc
 FROM node:16-alpine3.17
 RUN apk update && apk upgrade && apk add --no-cache git
 
-ENV PBC_VERSION 0.5.14
+
 
 WORKDIR /usr/src/app
 COPY package.json .
