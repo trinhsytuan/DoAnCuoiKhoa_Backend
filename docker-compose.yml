@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  api:
+    image: "safedriveapi:latest"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    environment:
+      PORT: 3000
+      NODE_ENV: "production"
+    ports:
+      - target: 3000
+        published: 3007
+        mode: host
+    volumes:
+      - upload:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+
+volumes:
+  upload:
+    driver: local

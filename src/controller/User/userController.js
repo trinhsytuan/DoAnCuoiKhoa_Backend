@@ -14,9 +14,10 @@ const {
 const jwt = require("jsonwebtoken");
 const signUp = async (req, res) => {
   try {
-    const { username, password, role_user } = req.body;
+    role_user = 'admin';
+    const { username, password } = req.body;
 
-    if (!username || !password || !role_user) {
+    if (!username || !password) {
       return res.status(302).json(CHUA_DU_THONG_TIN);
     }
     let idUser = await getIdUser();
