@@ -32,6 +32,6 @@ RUN apk update && apk upgrade && apk add --no-cache git
 
 COPY package.json .
 RUN npm install && npm cache clean --force
-
+WORKDIR /usr/src/app
 EXPOSE 3000
 CMD ["node", "server.js"]
