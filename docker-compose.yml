@@ -20,5 +20,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
 
 volumes:
-  upload:
+  uploads:
+    driver: local
+  decrypt:
     driver: local
