@@ -15,7 +15,8 @@ services:
         published: 3007
         mode: host
     volumes:
-      - upload:/usr/src/app/upload
+      - uploads:/usr/src/app/uploads
+      - decrypt:/usr/src/app/decrypt
       - /etc/localtime:/etc/localtime:ro
 
 volumes:
