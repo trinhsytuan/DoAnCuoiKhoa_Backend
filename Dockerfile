@@ -1,4 +1,4 @@
-FROM buildpack-deps:buster
+FROM buildpack-deps:buster as buildstep
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
                 bison \
@@ -30,8 +30,9 @@ RUN g++ -o MaHoaT MaHoaT.cpp -lgmp -lpbc
 FROM node:16-alpine3.17
 RUN apk update && apk upgrade && apk add --no-cache git
 
-COPY package.json .
+COPY --from=buildstep /usr/src/app /usr/src/app
 RUN npm install && npm cache clean --force
+
 WORKDIR /usr/src/app
 EXPOSE 3000
 CMD ["node", "server.js"]
