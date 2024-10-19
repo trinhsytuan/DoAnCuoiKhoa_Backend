@@ -37,5 +37,7 @@ COPY package.json .
 RUN npm install && npm cache clean --force
 
 RUN npm run build
+RUN mkdir /usr/src/app/upload
+RUN mkdir /usr/src/app/decrypt
 EXPOSE 3000
 CMD ["node", "dist/app.js"]
