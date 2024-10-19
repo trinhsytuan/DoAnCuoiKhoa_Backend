@@ -20,6 +20,19 @@ async function main() {
     app.listen(process.env.LISTEN_PORT, () => {
       console.log("Server running port:" + process.env.LISTEN_PORT);
     });
+    const curentDateFolder = new Date()
+      .toISOString()
+      .slice(0, 10)
+      .replace(/-/g, "");
+   
+    const tempDir = path.join("./uploads", curentDateFolder);
+    const tempDecrypt = path.join("./decrypt", curentDateFolder);
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+    if (!fs.existsSync(tempDecrypt)) {
+      fs.mkdirSync(tempDecrypt, { recursive: true });
+    }
   } catch (error) {
     console.log(">>>> Error Connect to DB:", error);
     console.log("Server Error, please contact TServices");
@@ -27,4 +40,3 @@ async function main() {
   }
 }
 main();
-
