@@ -1,5 +1,5 @@
 #include <iostream>
-#include <pbc.h>
+#include<pbc/pbc.h>
 #include <stdio.h>
 #include <fstream>
 #include <sstream>
