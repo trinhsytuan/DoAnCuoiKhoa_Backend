@@ -31,8 +31,8 @@ FROM node:16-alpine3.17
 RUN apk update && apk upgrade && apk add --no-cache git
 
 COPY --from=buildstep /usr/src/app /usr/src/app
+WORKDIR /usr/src/app
 RUN npm install && npm cache clean --force
 
-WORKDIR /usr/src/app
 EXPOSE 3000
 CMD ["node", "server.js"]
