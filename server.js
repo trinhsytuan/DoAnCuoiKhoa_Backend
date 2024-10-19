@@ -1,4 +1,4 @@
-const connection = require("./config/database");
+const connection = require("./src/config/database");
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
@@ -11,8 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: "*" }));
 app.use("/api/static", express.static(path.join(__dirname, "uploads")));
 app.use("/api/download", express.static(path.join(__dirname, "decrypt")));
-const mainRouter = require("./router/mainRouter");
-const { createLiveStream } = require("./livestream/livestream");
+const mainRouter = require("./src/router/mainRouter");
+const { createLiveStream } = require("./src/livestream/livestream");
 app.use("/api", mainRouter);
 async function main() {
   try {
