@@ -27,11 +27,15 @@ async function main() {
    
     const tempDir = path.join("./uploads", curentDateFolder);
     const tempDecrypt = path.join("./decrypt", curentDateFolder);
+    const tempCipher = path.join("./cipher", curentDateFolder);
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true });
     }
     if (!fs.existsSync(tempDecrypt)) {
       fs.mkdirSync(tempDecrypt, { recursive: true });
+    }
+    if (!fs.existsSync(tempCipher)) {
+      fs.mkdirSync(tempCipher, { recursive: true });
     }
   } catch (error) {
     console.log(">>>> Error Connect to DB:", error);

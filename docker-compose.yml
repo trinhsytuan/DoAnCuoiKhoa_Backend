@@ -17,10 +17,13 @@ services:
     volumes:
       - uploads:/usr/src/app/uploads
       - decrypt:/usr/src/app/decrypt
+      - cipher:/usr/src/app/cipher
       - /etc/localtime:/etc/localtime:ro
 
 volumes:
   uploads:
     driver: local
   decrypt:
+    driver: local
+  cipher:
     driver: local
